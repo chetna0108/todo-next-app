@@ -1,101 +1,324 @@
-import Image from "next/image";
+"use client";
+import React, { useState } from "react";
+import Todo from "@/Components/Todo";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function Home() {
+const page = () => {
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+  });
+
+  const onChangeHandler = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    setFormData((form) => ({ ...form, [name]: value }));
+    console.log(formData);
+  };
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      // Simulate API code here
+      console.log("Form submitted", formData);
+
+      // Show success toast
+      toast.success("Todo added successfully!");
+    } catch (error) {
+      console.error(error);
+
+      // Show error toast if an error occurs
+      toast.error("Failed to add Todo.");
+    }
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
+    <>
+      <ToastContainer theme="dark" />
+      <form
+        onSubmit={onSubmitHandler} // Corrected here
+        className="flex item-start flex-col gap-2 w-[80%] max-w-[600px] mt-24 px-2 mx-auto"
+      >
+        <input
+          type="text"
+          name="title"
+          placeholder="Enter Title"
+          className="px-3 py-2 border-2 w-full"
+          value={formData.title}
+          onChange={onChangeHandler}
         />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+        <textarea
+          name="description"
+          placeholder="Enter Description"
+          className="px-3 py-2 border-2 w-full"
+          value={formData.description}
+          onChange={onChangeHandler}
+        ></textarea>
+        <button type="submit" className="bg-orange-600 py-3 px-11 text-white">
+          Add Todo
+        </button>
+      </form>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      <div className="relative overflow-x-auto mt-24 w-[60%] mx-auto">
+        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th scope="col" className="px-6 py-3">
+                ID
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Title
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Description
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Status
+              </th>
+              <th scope="col" className="px-6 py-3">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <Todo />
+            <Todo />
+            <Todo />
+          </tbody>
+        </table>
+      </div>
+    </>
   );
-}
+};
+
+export default page;
+
+
+
+
+
+// "use client";
+// import React, { useState } from "react";
+// import Todo from "@/Components/Todo";
+// import { ToastContainer , toast } from "react-toastify";
+// import 'react-toastify/dist/ReactToastify.css';
+
+// const page = () => {
+//   const [formData, setFormData] = useState({
+//     title: "",
+//     description: "",
+//   });
+
+//   const onChangeHandler = (e) => {
+//     const name = e.target.name;
+//     const value = e.target.value; // Fixed the typo here
+//     setFormData((form) => ({ ...form, [name]: value }));
+//     console.log(formData);
+//   };
+//   const onSubmitHandler = async (e) =>{
+//     e.preventDefault();
+//     try{
+//       //API code
+
+//       toast.success('Success')
+//     } catch(error){
+
+//     }
+//   }
+
+//   return (
+//     <>
+//     <ToastContainer/>
+//       <form onSubmi={onSubmitHandler} className="flex item-start flex-col gap-2 w-[80%] max-w-[600px] mt-24 px-2 mx-auto">
+//         <input
+//           type="text"
+//           name="title"
+//           placeholder="Enter Title"
+//           className="px-3 py-2 border-2 w-full"
+//           value={formData.title}
+//           onChange={onChangeHandler} // Use a single handler
+//         />
+//         <textarea
+//           name="description"
+//           placeholder="Enter Description"
+//           className="px-3 py-2 border-2 w-full"
+//           value={formData.description}
+//           onChange={onChangeHandler} // Use a single handler
+//         ></textarea>
+//         <button type="submit" className="bg-orange-600 py-3 px-11 text-white">
+//           Add Todo
+//         </button>
+//       </form>
+
+//       <div className="relative overflow-x-auto mt-24 w-[60%] mx-auto">
+//         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+//           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+//             <tr>
+//               <th scope="col" className="px-6 py-3">
+//                 ID
+//               </th>
+//               <th scope="col" className="px-6 py-3">
+//                 Title
+//               </th>
+//               <th scope="col" className="px-6 py-3">
+//                 Description
+//               </th>
+//               <th scope="col" className="px-6 py-3">
+//                 Status
+//               </th>
+//               <th scope="col" className="px-6 py-3">
+//                 Action
+//               </th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             <Todo />
+//             <Todo />
+//             <Todo />
+//           </tbody>
+//         </table>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default page;
+
+
+
+// "use client";
+// import React, { useState } from 'react'; // Import useState hook
+// import Todo from '@/Components/Todo';
+
+// const page = () => {
+//   // Move useState inside the component
+//   const [formData, setFormData] = useState({
+//     title: "",
+//     description: "",
+//   });
+//   const onChangeHandler=(e)=>{
+//     const name= e.target.name;
+//     const vale=e.target.value;
+//     setFormData(form=>({...form ,[name]: value}));
+//     console.log(formData);
+
+//   }
+
+//   return (
+//     <>
+//       <form className="flex item-start flex-col gap-2 w-[80%] max-w-[600px] mt-24 px-2 mx-auto">
+//         <input value= {formData.title } onChange={onChangeHandler}
+//           type="text"
+//           name="title"
+//           placeholder="Enter Title"
+//           className="px-3 py-2 border-2 w-full"
+//           value={formData.title} // Controlled input
+//           onChange={(e) => setFormData({ ...formData, title: e.target.value })} // Update formData state
+//         />
+//         <textarea value={ formData.description} onChange={ onChangeHandler}
+//           name="description"
+//           placeholder="Enter Description"
+//           className="px-3 py-2 border-2 w-full"
+//           value={formData.description} // Controlled textarea
+//           onChange={(e) =>
+//             setFormData({ ...formData, description: e.target.value })
+//           } // Update formData state
+//         ></textarea>
+//         <button type="submit" className="bg-orange-600 py-3 px-11 text-white">
+//           Add Todo
+//         </button>
+//       </form>
+
+//       <div className="relative overflow-x-auto mt-24 w-[60%] mx-auto">
+//         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+//           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+//             <tr>
+//               <th scope="col" className="px-6 py-3">
+//                 ID
+//               </th>
+//               <th scope="col" className="px-6 py-3">
+//                 Title
+//               </th>
+//               <th scope="col" className="px-6 py-3">
+//                 Description
+//               </th>
+//               <th scope="col" className="px-6 py-3">
+//                 Status
+//               </th>
+//               <th scope="col" className="px-6 py-3">
+//                 Action
+//               </th>
+//             </tr>
+//           </thead>
+//           <tbody>
+//             <Todo />
+//             <Todo />
+//             <Todo />
+//           </tbody>
+//         </table>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default page;
+
+
+
+
+// // "use client"
+// // import React from 'react'
+// // import Todo from '@/Components/Todo'
+
+// // const [formData,serFormData] = useState({
+// //   title:"",
+// //   description:"",
+
+// // });
+// // const page = () => {
+
+// //   return (
+// //     <>
+// //       <form className='flex item-start flex-col gap-2 w-[80%] max-w-[600px] mt-24 px-2 mx-auto'>
+// //         <input type="text" name="title" placeholder="Enter Title" className='px-3 py-2 border-2 w-full ' />
+// //         <textarea name="description" placeholder='Enter Description ' className='px-3 py-2 border-2 w-full'></textarea>
+// //         <button type='submit' className='bg-orange-600 py-3 px-11 text-white'> Add Todo</button>
+// //       </form>
+
+
+// //       <div className="relative overflow-x-auto mt-24 w-[60%] mx-auto ">
+// //         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+// //           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+// //             <tr>
+// //               <th scope="col" className="px-6 py-3">
+// //                 ID
+// //               </th>
+// //               <th scope="col" className="px-6 py-3">
+// //                 Title
+// //               </th>
+// //               <th scope="col" className="px-6 py-3">
+// //                 Description
+// //               </th>
+// //               <th scope="col" className="px-6 py-3">
+// //                 Status
+// //               </th>
+// //               <th scope="col" className="px-6 py-3">
+// //                 Action
+// //               </th>
+// //             </tr>
+// //           </thead>
+// //           <tbody>
+// //             <Todo/>
+// //             <Todo/>
+// //             <Todo/>
+
+// //           </tbody>
+// //         </table>
+// //       </div>
+
+// //     </>
+// //   )
+// // }
+
+// // export default page
